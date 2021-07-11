@@ -1,0 +1,2 @@
+class MembersOnlyController < ApplicationController
+end
