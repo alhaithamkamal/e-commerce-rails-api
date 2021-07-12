@@ -10,12 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_11_175811) do
+ActiveRecord::Schema.define(version: 2021_07_12_160812) do
+
+  create_table "categories", charset: "utf8mb4", force: :cascade do |t|
+    t.string "title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "jwt_denylists", charset: "utf8mb4", force: :cascade do |t|
     t.string "jti", null: false
     t.datetime "expired_at", null: false
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
+  end
+
+  create_table "sub_categories", charset: "utf8mb4", force: :cascade do |t|
+    t.string "title"
+    t.bigint "category_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["category_id"], name: "fk_rails_8e75c2ee78"
   end
 
   create_table "users", charset: "utf8mb4", force: :cascade do |t|
@@ -30,4 +44,5 @@ ActiveRecord::Schema.define(version: 2021_07_11_175811) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "sub_categories", "categories"
 end
