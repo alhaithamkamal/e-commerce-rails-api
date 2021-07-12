@@ -10,7 +10,7 @@ class SubCategoriesController < ApplicationController
 
   # GET /sub_categories/1
   def show
-    render json: @sub_category.as_json(methods: :category)
+    render json: @sub_category.as_json(methods: [:category, :items])
   end
 
   # POST /sub_categories
