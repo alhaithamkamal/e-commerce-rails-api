@@ -10,7 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_12_193417) do
+ActiveRecord::Schema.define(version: 2021_07_13_200015) do
+
+  create_table "active_storage_attachments", charset: "utf8mb4", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", charset: "utf8mb4", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
 
   create_table "cart_items", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "cart_id", null: false
@@ -53,6 +81,16 @@ ActiveRecord::Schema.define(version: 2021_07_12_193417) do
     t.index ["jti"], name: "index_jwt_denylists_on_jti"
   end
 
+  create_table "orders", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "country"
+    t.string "address"
+    t.string "phone"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
   create_table "sub_categories", charset: "utf8mb4", force: :cascade do |t|
     t.string "title"
     t.bigint "category_id"
@@ -73,9 +111,12 @@ ActiveRecord::Schema.define(version: 2021_07_12_193417) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "items"
   add_foreign_key "carts", "users"
   add_foreign_key "items", "sub_categories"
+  add_foreign_key "orders", "users"
   add_foreign_key "sub_categories", "categories"
 end

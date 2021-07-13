@@ -10,11 +10,12 @@ class ItemsController < ApplicationController
 
   # GET /items/1
   def show
-    render json: @item.as_json(methods: :category)
+    render json: @item.as_json(methods: [:category, :images])
   end
 
   # POST /items
   def create
+    return render json: item_params[:images]
     @item = Item.new(item_params)
 
     if @item.save
@@ -46,6 +47,6 @@ class ItemsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def item_params
-      params.require(:item).permit(:title, :brand, :description, :stock, :price, :sub_category_id)
+      params.require(:item).permit(:title, :brand, :description, :stock, :price, :sub_category_id, images: [])
     end
 end
